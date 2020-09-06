@@ -1,0 +1,9 @@
+#screen .wave {
+  height: 20%;
+}
+
+#screen .page {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 20vh;
+}
