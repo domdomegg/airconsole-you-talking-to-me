@@ -29,6 +29,7 @@ function Screen() {
       const sender = sample(deviceIds, 1)[0];
       const receiver = sample(deviceIds.filter(id => id !== sender), 1)[0];
       const points = state.pageId === 'results' ? state.points : {};
+      points[sender] = points[sender] || 0;
 
       ac.setCustomDeviceState({
         pageId: 'words',
@@ -73,8 +74,9 @@ function Screen() {
       }
 
       state.guesses[device_id] = data.word;
-      state.points[device_id] = (state.points[device_id] || 0) + (data.word === state.chosenWord ? 1000 : 0);
-      state.points[state.sender] = (state.points[state.sender] || 0) + (data.word === state.chosenWord ? (device_id === state.receiver ? 2000 : -200) : 0);
+      const timeMultiplier = 0.8 + 0.2 * (Date.now() - state.timer.starts) / ROUND_LENGTH_MILISECONDS;
+      state.points[device_id] = (state.points[device_id] || 0) + Math.floor(timeMultiplier * (data.word === state.chosenWord ? 1000 : 0));
+      state.points[state.sender] = (state.points[state.sender] || 0) + Math.floor(timeMultiplier * (data.word === state.chosenWord ? (device_id === state.receiver ? 2000 : -200) : 0));
       
       if (Object.keys(state.guesses).length === ac.getActivePlayerDeviceIds().length - 1) {
         clearTimeout(gameTimer.current);

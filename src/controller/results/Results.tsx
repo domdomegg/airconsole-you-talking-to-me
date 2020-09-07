@@ -21,7 +21,7 @@ function Guess({ guess, actual }: { guess: string, actual: string } & React.Prop
   }
 
   if (guess === actual) {
-    return <p>You guessed <Highlight>{guess}</Highlight>, which was the correct answer!</p>;
+    return <p>You guessed <Highlight>{guess}</Highlight>, which was correct!</p>;
   }
 
   return <p>You guessed <Highlight>{guess}</Highlight>, but the word was <Highlight>{actual}</Highlight>.</p>;

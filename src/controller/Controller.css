@@ -12,6 +12,11 @@
   padding-top: 10vh;
 }
 
+#controller ul li {
+  padding: 15px;
+  font-size: 24px;
+}
+
 #controller ul button {
   padding: 15px;
   font-size: 24px;

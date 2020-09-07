@@ -4,13 +4,16 @@ import Highlight from '../../shared/Highlight';
 function Words() {
   const state: WordsState = ac.getCustomDeviceState(AirConsole.SCREEN);
 
+  const remainingGuessers = ac.getActivePlayerDeviceIds().filter(device_id => !state.guesses[device_id] && state.sender !== device_id);
+
   return (
     <>
-      <h1 style={{ fontSize: '70px' }}><Highlight>{ac.getNickname(state.sender)}</Highlight> is communicating one of these</h1>
+      <h1 style={{ fontSize: '70px' }}><Highlight>{ac.getNickname(state.sender)}</Highlight> is describing one of</h1>
       <Loader timer={state.timer} />
       <ul>
         {state.words.map(word => <li key={word}>{word}</li>)}
       </ul>
+      <p>Waiting for <Highlight>{remainingGuessers.slice(0, 3).map((device_id) => ac.getNickname(device_id)).join(', ')}</Highlight> to guess</p>
     </>
   )
 }
