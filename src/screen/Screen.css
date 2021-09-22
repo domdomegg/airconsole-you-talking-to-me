@@ -1,9 +1,18 @@
+#screen {
+  font-size: 2.5vw;
+}
+
+#screen ul li {
+  font-size: 2.75vw;
+  padding: 1.25vw;
+}
+
 #screen .wave {
-  height: 20%;
+  height: 15vh;
 }
 
 #screen .page {
-  padding-left: 10%;
-  padding-right: 10%;
-  padding-top: 20vh;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  padding-top: 15vh;
 }

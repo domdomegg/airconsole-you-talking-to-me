@@ -8,7 +8,7 @@ function Words() {
 
   return (
     <>
-      <h1 style={{ fontSize: '70px' }}><Highlight>{ac.getNickname(state.sender)}</Highlight> is describing one of</h1>
+      <h1 style={{ fontSize: '6vw' }}><Highlight>{ac.getNickname(state.sender)}</Highlight> is describing one of</h1>
       <Loader timer={state.timer} />
       <ul>
         {state.words.map(word => <li key={word}>{word}</li>)}
@@ -19,12 +19,6 @@ function Words() {
 }
 
 function Loader({ timer }: { timer: Interval } & React.Props<{}>) {
-  // return (
-  //   <div style={{ backgroundColor: 'rgba(37, 161, 142, 0.2)', borderRadius: '10px', overflow: 'hidden', margin: '30px 0' }}>
-  //     <div ref={recalcAnimation(timer)} style={{ height: '20px', backgroundColor: '#25A18E', animationTimingFunction: 'linear', animationFillMode: 'forwards', width: 0, animationDuration: `${timer.ends - timer.starts}ms` }}></div>
-  //   </div>
-  // )
-
   return (
     <svg style={{ bottom: 0, zIndex: 1 }} className="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
       <defs>

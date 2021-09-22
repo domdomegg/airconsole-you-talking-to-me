@@ -1,5 +1,6 @@
 #controller {
   overflow: auto;
+  font-size: 2rem;
 }
 
 #controller .wave {
@@ -12,14 +13,12 @@
   padding-top: 10vh;
 }
 
-#controller ul li {
-  padding: 15px;
-  font-size: 24px;
+#controller ul li, #controller ul button {
+  font-size: 1.5rem;
+  padding: 1rem;
 }
 
 #controller ul button {
-  padding: 15px;
-  font-size: 24px;
   animation: none;
   top: 2px;
   box-shadow: 0px 8px 0px #B83100, 0px 8px 16px rgba(0, 0, 0, .35);
