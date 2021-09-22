@@ -15,6 +15,7 @@
     "react-scripts": "3.4.3",
     "typescript": "^3.7.5"
   },
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && cp build/index.html build/screen.html && cp build/index.html build/controller.html",
