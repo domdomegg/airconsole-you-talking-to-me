@@ -2,6 +2,9 @@
 
 Multiplayer party game, built for the AirConsole platform.
 
+![A screenshot of the game in progress, showing a set of words and a statement that Guest 1 is describing one of them](./branding/screenshot.png)
+
+
 ## 🔧 Setup
 
 `npm install`
