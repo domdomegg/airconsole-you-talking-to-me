@@ -29,6 +29,10 @@ jobs:
         run: npm run lint --if-present
       - name: 'Test'
         run: npm run test --if-present
+      - name: 'Copy files for screen and controller'
+        run: |
+          cp build/index.html build/screen.html
+          cp build/index.html build/controller.html
       - name: 'Deploy'
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3

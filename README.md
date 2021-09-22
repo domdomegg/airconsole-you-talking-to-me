@@ -1,6 +1,10 @@
-# AirConsole: You talking to me?
+# AirConsole: You talking to me? [(try live)](https://www.airconsole.com/simulator/#debug:https://domdomegg.github.io/airconsole-you-talking-to-me/)
 
 Multiplayer party game, built for the AirConsole platform.
+
+## 🔧 Setup
+
+`npm install`
 
 ## 🏃 Running
 
