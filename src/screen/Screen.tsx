@@ -114,7 +114,7 @@ function Screen() {
     return <Container><Results /></Container>
   }
 
-  throw new Error('Invalid pageId ' + state!.pageId);
+  throw new Error('Invalid pageId ' + (state as any).pageId);
 }
 
 function Container({ children }: React.Props<{}>) {

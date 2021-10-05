@@ -3,7 +3,7 @@ import Screen from './screen/Screen';
 import Controller from './controller/Controller';
 
 function App() {
-  const [,forceUpdate] = useState();
+  const [,forceUpdate] = useState<{}>();
 
   ac.onDisconnect = () => forceUpdate({});
   ac.onConnect = () => forceUpdate({});
