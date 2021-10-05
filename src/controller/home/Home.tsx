@@ -15,7 +15,7 @@ function Home() {
 
 function Master() {
   return (
-    <button style={{ marginTop: '30vh' }} onClick={() => ac.message(AirConsole.SCREEN, { type: "START" })}>Start Game</button>
+    <div className="buttonContainer" style={{ marginTop: '30vh' }} onClick={() => ac.message(AirConsole.SCREEN, { type: "START" })}><button>Start Game</button></div>
   )
 }
 

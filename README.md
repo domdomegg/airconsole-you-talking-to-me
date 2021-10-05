@@ -23,7 +23,7 @@ The game will be availble on `http://localhost:3000`, which can be [opened in th
 
 `npm run build` will build the files in `src` and `public` to `build`
 
-`serve -s build -p 3000` will serve the files from `build`
+`serve build -p 3000` will serve the files from `build`
 
 ## 🎮 Playing with others
 

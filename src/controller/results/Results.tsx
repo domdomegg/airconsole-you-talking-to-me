@@ -10,7 +10,7 @@ function Results() {
       <p>You now have <Highlight>{state.points[ac.getDeviceId()] || 0}</Highlight> points!</p>
       <br/>
       <Guess guess={state.guesses[ac.getDeviceId()]} actual={state.chosenWord} />
-      {isMaster() && <button style={{ marginTop: '15vh' }} onClick={() => ac.message(AirConsole.SCREEN, { type: "START" })}>Start Round</button>}
+      {isMaster() && <div className="buttonContainer" onClick={() => ac.message(AirConsole.SCREEN, { type: "START" })} style={{ marginTop: '15vh' }}><button>Start Round</button></div>}
     </>
   )
 }

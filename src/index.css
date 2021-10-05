@@ -42,6 +42,11 @@ ul li {
   font-weight: bold;
 }
 
+.buttonContainer {
+  cursor: pointer;
+  display: inline-block;
+}
+
 button {
   padding: 25px;
   margin: 0 7.5px 20px 7.5px;
@@ -57,7 +62,7 @@ button {
   box-shadow: 0px 12px 0px #B83100, 0px 12px 24px rgba(0, 0, 0, .35);
   animation: button_bounce 0.5s infinite alternate;
   position: relative;
-  transition: 0.2s all ease;
+  transition: 0.5s all ease;
 }
 
 @keyframes button_bounce {
@@ -72,7 +77,7 @@ button {
   }
 }
 
-button:hover {
+.buttonContainer:hover button {
   background-color: #FF4B0A;
   top: 0px !important;
   box-shadow: 0px 12px 0px #B83100, 0px 12px 24px rgba(0, 0, 0, .35);

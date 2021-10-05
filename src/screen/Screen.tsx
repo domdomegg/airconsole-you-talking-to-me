@@ -53,6 +53,7 @@ function Screen() {
           guesses: wordsState.guesses,
           points: wordsState.points
         });
+        ac.showAd();
       }, ROUND_LENGTH_MILISECONDS);
       return;
     }
@@ -86,6 +87,7 @@ function Screen() {
           guesses: state.guesses,
           points: state.points
         });
+        ac.showAd();
       } else {
         ac.setCustomDeviceState(state);
       }
