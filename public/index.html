@@ -1,84 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this game.</noscript>
-    <div id="root"></div>
-    <script>
-      var ac = new AirConsole({ setup_document: false, device_motion: false, translation: false });
 
-      // Change behaviour to invoke onCustomDeviceStateChange on changing own custom state
-      ac.actualSetCustomDeviceState = ac.setCustomDeviceState;
-      ac.setCustomDeviceState = (data) => {
-        ac.actualSetCustomDeviceState(data);
-        ac.onCustomDeviceStateChange(ac.getDeviceId(), data);
+<head>
+  <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this game.</noscript>
+  <div id="root"></div>
+  <script>
+    var ac = new AirConsole({ setup_document: false, device_motion: false, translation: false });
+
+    // Change behaviour to invoke onCustomDeviceStateChange on changing own custom state
+    ac.actualSetCustomDeviceState = ac.setCustomDeviceState;
+    ac.setCustomDeviceState = (data) => {
+      ac.actualSetCustomDeviceState(data);
+      ac.onCustomDeviceStateChange(ac.getDeviceId(), data);
+    }
+
+    /* BELOW THIS POINT IS GENERAL MAGIC TO MAKE HOT RELOADING WORK */
+
+    if ("__reactRefreshInjected" in window) {
+      ac.actualOnPostMessage_ = ac.onPostMessage_;
+      ac.onPostMessage_ = ({ data }) => {
+        // If we're a controller, and we get a resync request, make an update. This will inform the screen and other controllers of who we are.
+        if (ac.device_id !== 0 && data.action == "update" && data.device_id === 0 && data.device_data && data.device_data.custom && data.device_data.custom.pageId == 'resync') {
+          window.parent.postMessage({ action: 'set', key: 'custom', value: Date.now() }, 'http://www.airconsole.com/file/debug/proxy.html');
+        }
+
+        // If we're in a resync, accept any updates about devices
+        if (data.action == "update" && (!ac.devices[0] || !ac.devices[0].custom || ac.devices[0].custom.pageId === 'resync')) {
+          ac.devices[data.device_id] = data.device_data;
+          ac.onConnect();
+        }
+
+        // If we're the screen, and we're in a resync, message any updaters with information about themselves
+        if (ac.device_id === 0 && data.action == "update" && data.device_id !== 0 && data.device_data && (!ac.devices[0] || !ac.devices[0].custom || ac.devices[0].custom.pageId === 'resync')) {
+          ac.message(data.device_id, { type: "RESYNC_DATA", device_id: data.device_id, device_data: data.device_data });
+        }
+
+        // If we're a controller, and we get a RESYNC_DATA message from the screen, then update our information about ourselves
+        if (ac.device_id !== 0 && data.action == "message" && data.from === 0 && data.data && data.data.type == 'RESYNC_DATA') {
+          ac.device_id = data.data.device_id;
+          ac.devices[data.data.device_id] = data.data.device_data;
+          ac.onConnect();
+        }
+
+        ac.actualOnPostMessage_({ data })
       }
 
-      /* BELOW THIS POINT IS GENERAL MAGIC TO MAKE HOT RELOADING WORK */
-
-      if (__reactRefreshInjected) {
-        ac.actualOnPostMessage_ = ac.onPostMessage_;
-        ac.onPostMessage_ = ({ data }) => {
-          // If we're a controller, and we get a resync request, make an update. This will inform the screen and other controllers of who we are.
-          if (ac.device_id !== 0 && data.action == "update" && data.device_id === 0 && data.device_data && data.device_data.custom && data.device_data.custom.pageId == 'resync') {
-            window.parent.postMessage({ action: 'set', key: 'custom', value: Date.now() }, 'http://www.airconsole.com/file/debug/proxy.html');
-          }
-          
-          // If we're in a resync, accept any updates about devices
-          if (data.action == "update" && (!ac.devices[0] || !ac.devices[0].custom || ac.devices[0].custom.pageId === 'resync')) {
-            ac.devices[data.device_id] = data.device_data;
-            ac.onConnect();
-          }
-          
-          // If we're the screen, and we're in a resync, message any updaters with information about themselves
-          if (ac.device_id === 0 && data.action == "update" && data.device_id !== 0 && data.device_data && (!ac.devices[0] || !ac.devices[0].custom || ac.devices[0].custom.pageId === 'resync')) {
-            ac.message(data.device_id, { type: "RESYNC_DATA", device_id: data.device_id, device_data: data.device_data });
-          }
-          
-          // If we're a controller, and we get a RESYNC_DATA message from the screen, then update our information about ourselves
-          if (ac.device_id !== 0 && data.action == "message" && data.from === 0 && data.data && data.data.type == 'RESYNC_DATA') {
-            ac.device_id = data.data.device_id;
-            ac.devices[data.data.device_id] = data.data.device_data;
-            ac.onConnect();
-          }
-
-          ac.actualOnPostMessage_({ data })
-        }
-
-        // Override for postMessage_ to fix document.referrer e.g. so it does not change on reload
-        AirConsole.postMessage_ = function(data) {
-          try {
-            window.parent.postMessage(data, 'http://www.airconsole.com/file/debug/proxy.html');
-          } catch(e) {
-            console.log("Posting message to parent failed: " + JSON.stringify(data));
-          }
-        }
-
-        // If we're the screen, but AirConsole hasn't set a device_id then perform a resync
-        if (window.location.pathname.endsWith('screen.html')) {
-          setTimeout(() => {
-            if (ac.device_id === undefined) {
-              console.log('Failed to get device_id, attempting resync...')
-              ac.onPostMessage_({
-                data: {
-                  action: "ready",
-                  device_id: 0,
-                  devices: [{
-                    location: window.location.href
-                  }]
-                }
-              });
-              ac.setCustomDeviceState({ pageId: 'resync', now: Date.now() });
-              setTimeout(() => {
-                ac.setCustomDeviceState({ pageId: 'home' });
-              }, 500)
-            }
-          }, 500);
+      // Override for postMessage_ to fix document.referrer e.g. so it does not change on reload
+      AirConsole.postMessage_ = function (data) {
+        try {
+          window.parent.postMessage(data, 'http://www.airconsole.com/file/debug/proxy.html');
+        } catch (e) {
+          console.log("Posting message to parent failed: " + JSON.stringify(data));
         }
       }
-    </script>
-  </body>
+
+      // If we're the screen, but AirConsole hasn't set a device_id then perform a resync
+      if (window.location.pathname.endsWith('screen.html')) {
+        setTimeout(() => {
+          if (ac.device_id === undefined) {
+            console.log('Failed to get device_id, attempting resync...')
+            ac.onPostMessage_({
+              data: {
+                action: "ready",
+                device_id: 0,
+                devices: [{
+                  location: window.location.href
+                }]
+              }
+            });
+            ac.setCustomDeviceState({ pageId: 'resync', now: Date.now() });
+            setTimeout(() => {
+              ac.setCustomDeviceState({ pageId: 'home' });
+            }, 500)
+          }
+        }, 500);
+      }
+    }
+  </script>
+</body>
+
 </html>
