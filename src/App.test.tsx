@@ -6,8 +6,9 @@ jest.mock('./screen/Screen', () => () => <h1>SCREEN</h1>);
 jest.mock('./controller/Controller', () => () => <h1>CONTROLLER</h1>);
 
 beforeAll(() => {
-  delete window.location;
-  window.location = {} as Location;
+  Object.defineProperty(window, 'location', {
+    value: {} as Location
+  });
 })
 
 test('routes to screen', () => {
