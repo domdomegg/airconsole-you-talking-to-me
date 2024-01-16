@@ -18,10 +18,10 @@
   "homepage": "./",
   "scripts": {
     "start": "BROWSER=none react-scripts start",
-    "build": "react-scripts build && cp build/index.html build/screen.html && cp build/index.html build/controller.html",
+    "build": "BUILD_PATH=./dist react-scripts build && cp dist/index.html dist/screen.html && cp dist/index.html dist/controller.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "package": "npm run build && rm -f build.zip && cd build && zip -r ../build.zip *"
+    "package": "npm run build && rm -f build.zip && cd dist && zip -r ../build.zip *"
   },
   "eslintConfig": {
     "extends": "react-app"
